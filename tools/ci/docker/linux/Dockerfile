@@ -225,6 +225,17 @@ RUN mkdir wamrc && \
   | tar -C wamrc -xz
 
 ###############################################################################
+# Build ocaml image for tool required by OCaml builds
+###############################################################################
+FROM ubuntu:22.04 AS nuttx-toolchain-ocaml
+
+RUN apt-get update -qq && DEBIAN_FRONTEND="noninteractive" apt-get install -y -qq \
+  opam
+
+RUN opam init --disable-sandboxing -y
+RUN opam switch create 4.13.0
+
+###############################################################################
 # Final Docker image used for running CI system.  This includes all toolchains
 # supported by the CI system.
 ###############################################################################
@@ -376,6 +387,10 @@ COPY --from=nuttx-toolchain-esp32 /tools/blobs/* /tools/blobs/esp-bins/
 COPY --from=nuttx-toolchain-wasm /tools/wasi-sdk/ wasi-sdk/
 ENV WASI_SDK_PATH="/tools/wasi-sdk"
 ENV PATH="/tools/wamr:$PATH"
+
+# OCaml toolchain
+COPY --from=nuttx-toolchain-ocaml /root/.opam/4.13.0 /root/.opam/4.13.0
+ENV PATH="/root/.opam/4.13.0/bin:$PATH"
 
 # Configure ccache
 RUN mkdir -p /tools/ccache/bin && \
