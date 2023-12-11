@@ -247,6 +247,18 @@ RUN mkdir wamrc && \
   | tar -C wamrc -xz
 
 ###############################################################################
+# Build ocaml image for tool required by OCaml builds
+###############################################################################
+FROM nuttx-toolchain-base AS nuttx-toolchain-ocaml
+
+RUN apt-get update -qq && DEBIAN_FRONTEND="noninteractive" apt-get install -y -qq opam
+
+ENV OPAMROOT=/tools/ocaml
+
+RUN opam init --disable-sandboxing -y
+RUN opam switch create 4.13.0
+
+###############################################################################
 # Final Docker image used for running CI system.  This includes all toolchains
 # supported by the CI system.
 ###############################################################################
@@ -426,6 +438,11 @@ COPY --from=nuttx-tools /tools/zap/ /tools/zap/
 COPY --from=nuttx-tools /tools/zap_release/ /tools/zap_release/
 ENV ZAP_INSTALL_PATH=/tools/zap_release
 ENV ZAP_DEVELOPMENT_PATH=/tools/zap
+
+# OCaml toolchain
+COPY --from=nuttx-toolchain-ocaml /tools/ocaml/ /tools/ocaml
+ENV OPAMROOT=/tools/ocaml
+ENV PATH="/tools/ocaml/4.13.0/bin:$PATH"
 
 # Configure ccache
 RUN mkdir -p /tools/ccache/bin && \
