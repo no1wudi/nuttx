@@ -143,6 +143,10 @@ if(CONFIG_LCD)
     list(APPEND SRCS st7789.c)
   endif()
 
+  if(CONFIG_LCD_ST77916)
+    list(APPEND SRCS st77916.c)
+  endif()
+
   if(CONFIG_LCD_GC9A01)
     list(APPEND SRCS gc9a01.c)
   endif()

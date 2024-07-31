@@ -333,8 +333,8 @@ static struct esp32s3_qspi_priv_s esp32s3_spi2_priv =
   .nbits       = 0,
 
   .dummies     = 0,
-  .addr_lines  = 4,
-  .data_lines  = 4,
+  .addr_lines  = 1,
+  .data_lines  = 1,
 };
 #endif /* CONFIG_ESP32S3_SPI2 */
 
