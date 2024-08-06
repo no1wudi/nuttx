@@ -55,10 +55,10 @@ else ifeq ($(CONFIG_ARCH_RISCV),y)
   ifeq ($(CONFIG_ARCH_RV_ISA_A),y)
     D_ARCHTYPE := $(D_ARCHTYPE)a
   endif
-  ifeq ($(CONFIG_ARCH_RV_ISA_F),y)
+  ifeq ($(CONFIG_ARCH_FPU),y)
     D_ARCHTYPE := $(D_ARCHTYPE)f
   endif
-  ifeq ($(CONFIG_ARCH_RV_ISA_D),y)
+  ifeq ($(CONFIG_ARCH_DPFPU),y)
     D_ARCHTYPE := $(D_ARCHTYPE)d
   endif
   ifeq ($(CONFIG_ARCH_RV_ISA_C),y)
